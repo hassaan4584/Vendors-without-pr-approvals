@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Identity.Models.DemandItem>
+
+@{
+    ViewBag.Title = "ViewItemDemands";
+    Layout = "~/Views/Shared/Store_keeper_layout.cshtml";
+}
+
+<h2>ViewItemDemands</h2>
+
+<div class="container-fluid">
+
+    <h4>Demands</h4>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Issue Date</th>
+            <th>Issued By</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var demands in Model)
+        {
+            <tr>
+                <td>@demands.ItemName</td>
+                <td>@demands.Quantity</td>
+                <td>@demands.Issue_Date</td>
+                <td>@demands.Issued_by</td>
+                <td>@demands.Price</td>
+                <td>
+
+                    @*<input type="submit" value="Approve" onclick="location.href = '@Url.Action("view_pr_department", "HOD", new { id = demands.DemandID })'" class="btn btn-primary btn-group-xs" />*@
+                    @Html.ActionLink("Prepare Request For PR", "ViewItemDemands", "StoreKeeper", new { id = demands.DemandID }, null)
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>

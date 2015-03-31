@@ -1,0 +1,181 @@
+﻿@model Identity.Models.PurchaseRequest
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Store_keeper_layout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.js"
+        type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        // Populate categories when the page is loaded.
+        $.getJSON('/PurchaseRequest/GetCategories', function (data) {
+            // Ajax success callback function.
+            // Populate dropdown from Json data returned from server.
+            $('#category option').remove();
+            $('#category').append('<option value=""></option');
+            for (i = 0; i < data.length; i++) {
+                $('#category').append('<option value="' +
+               data[i].Category + '">' + data[i].Category + '</option');
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            alert('Error getting categories!');
+        });
+
+        // First dropdown selection change event handler
+        $('#category').change(function () {
+            var catid = $(this).find(":selected").val();
+            if (catid.length > 0) {
+                // Populate products.
+                $.getJSON('/PurchaseRequest/GetProducts', { intCatID: catid }, function (data) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#product option').remove();
+                    $('#product').append('<option value=""></option');
+                    for (i = 0; i < data.length; i++) {
+                        $('#product').append('<option value="' +
+                        data[i].VendorID + '">' + data[i].Name + '</option');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting products!');
+                });
+            }
+            else {
+                // Remove all second dropdown options if
+                // empty option is selected in first dropdown.
+                $('#product option').remove();
+                $('#product').append('<option value=""></option');
+            }
+        });
+    });
+</script>
+<h2>Create</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>PurchaseRequest</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Issued_by, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Issued_by)
+                @Html.ValidationMessageFor(model => model.Issued_by)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Issue_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Issue_Date)
+                @Html.ValidationMessageFor(model => model.Issue_Date)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.current_status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.current_status)
+                @Html.ValidationMessageFor(model => model.current_status)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price)
+                @Html.ValidationMessageFor(model => model.Price)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Amount_in_words, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Amount_in_words)
+                @Html.ValidationMessageFor(model => model.Amount_in_words)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Approved_budget, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Approved_budget)
+                @Html.ValidationMessageFor(model => model.Approved_budget)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Balance_over_budget, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Balance_over_budget)
+                @Html.ValidationMessageFor(model => model.Balance_over_budget)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.demandID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.demandID)
+                @Html.ValidationMessageFor(model => model.demandID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.vendorname, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                   
+                <span>
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value=""></option>
+                    </select>
+                    <label for="product">Product</label>
+                    <select id="product" name="product">
+                        <option value=""></option>
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.authorized_by, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.authorized_by)
+                @Html.ValidationMessageFor(model => model.authorized_by)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.verified_date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.verified_date)
+                @Html.ValidationMessageFor(model => model.verified_date)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Authorization_date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Authorization_date)
+                @Html.ValidationMessageFor(model => model.Authorization_date)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
